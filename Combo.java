@@ -25,16 +25,29 @@ public class Combo implements Producto {
 
     @Override
     public double precio() {
-        return productos.stream()
-                .mapToDouble(Producto::precio)
-                .sum();
+        double precioTotal = 0;
+
+        for (Producto producto : productos) {
+            precioTotal += producto.precio();
+        }
+
+        return precioTotal;
     }
 
     @Override
     public int stock() {
-        return productos.stream()
-                .mapToInt(Producto::stock)
-                .min()
-                .orElse(0);
+        if (productos.isEmpty()) {
+            return 0;
+        }
+
+        int stockMinimo = productos.get(0).stock();
+
+        for (Producto producto : productos) {
+            if (producto.stock() < stockMinimo) {
+                stockMinimo = producto.stock();
+            }
+        }
+
+        return stockMinimo;
     }
 }
